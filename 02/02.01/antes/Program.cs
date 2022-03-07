@@ -25,6 +25,51 @@ namespace _02_01
                 where f.Diretor.Nome == "Tim Burton"
                 select f;
             Imprimir(consulta);
+
+            var consulta2 = from f in filmes
+                where f.Diretor.Nome == "Tim Burton"
+                select new FilmeResumido
+                {
+                    Titulo = f.Titulo,
+                    Diretor = f.Diretor.Nome
+                };
+            
+            Imprimir(consulta2);
+
+            var consulta3 = from f in filmes
+                where f.Diretor.Nome == "Tim Burton"
+                select new
+                {
+                    f.Titulo,
+                    Diretor = f.Diretor.Nome
+                };
+            
+            Console.WriteLine($"{"Título", -40} {"Diretor", -20}");
+            Console.WriteLine(new string('=', 56));
+            foreach (var filmeResumido in consulta3)
+            {
+                Console.WriteLine($"{filmeResumido.Titulo} {filmeResumido.Diretor, -20}");
+            }
+
+            var diretores = GetDiretores();
+
+            var consulta4 = from f in filmes
+                join d in diretores on f.DiretorId equals d.Id
+                where d.Nome == "Tim Burton"
+                select new
+                {
+                    f.Titulo,
+                    Diretor = d.Nome
+                };
+            
+            Console.WriteLine($"{"Título", -40} {"Diretor", -20}");
+            Console.WriteLine(new string('=', 56));
+            foreach (var filmeResumido in consulta4)
+            {
+                Console.WriteLine($"{filmeResumido.Titulo} {filmeResumido.Diretor, -20}");
+            }
+            
+            
             
             Console.ReadKey();
         }
@@ -36,6 +81,16 @@ namespace _02_01
             foreach (var filme in filmes)
             {
                 Console.WriteLine($"{filme.Titulo} {filme.Diretor.Nome, -20}  {filme.Ano, 4}");
+            }
+        }
+
+        private static void Imprimir(IEnumerable<FilmeResumido> filmesResumidos)
+        {
+            Console.WriteLine($"{"Título", -40} {"Diretor", -20}");
+            Console.WriteLine(new string('=', 56));
+            foreach (var filmeResumido in filmesResumidos)
+            {
+                Console.WriteLine($"{filmeResumido.Titulo} {filmeResumido.Diretor, -20}");
             }
         }
 
@@ -134,5 +189,11 @@ namespace _02_01
         public string Titulo { get; set; }
         public int Ano { get; set; }
         public int Minutos { get; set; }
+    }
+
+    class FilmeResumido
+    {
+        public string Titulo { get; set; }
+        public string Diretor { get; set; }
     }
 }
