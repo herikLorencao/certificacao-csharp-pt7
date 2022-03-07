@@ -9,7 +9,34 @@ namespace _02_01
     {
         static void Main(string[] args)
         {
+            var filmes = GetFilmes();
+
+            var novoFilme = new Filme
+            {
+                Titulo = "A Fantástica Fábrica de Chocolate",
+                Ano = 2005,
+                Diretor = new Diretor { Id = 3, Nome = "Tim Burton"},
+                DiretorId = 3
+            };
+            
+            filmes.Add(novoFilme);
+
+            var consulta = from f in filmes
+                where f.Diretor.Nome == "Tim Burton"
+                select f;
+            Imprimir(consulta);
+            
             Console.ReadKey();
+        }
+
+        private static void Imprimir(IEnumerable<Filme> filmes)
+        {
+            Console.WriteLine($"{"Título", -40} {"Diretor", -20} {"Ano", 4}");
+            Console.WriteLine(new string('=', 64));
+            foreach (var filme in filmes)
+            {
+                Console.WriteLine($"{filme.Titulo} {filme.Diretor.Nome, -20}  {filme.Ano, 4}");
+            }
         }
 
         private static List<Diretor> GetDiretores()
